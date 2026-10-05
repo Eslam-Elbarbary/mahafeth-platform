@@ -1,0 +1,10 @@
+{
+  "extends": "@mahafeth/typescript-config/node.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "noEmit": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

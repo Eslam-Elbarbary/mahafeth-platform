@@ -1,0 +1,390 @@
+/* Projects portfolio page (verbatim) — used by the upcoming components/projects/* migration. */
+@layer components {
+  .pband {
+    position: relative;
+    padding: calc(var(--hdr) + 3rem) 0 2.5rem;
+    overflow: hidden;
+  }
+  .pband__h {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(3rem, 8vw, 7.5rem);
+    line-height: 1.2;
+    padding-block: 0.04em;
+    margin-bottom: 1.6rem;
+  }
+  .pband__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 2rem;
+    align-items: end;
+    padding-bottom: 2.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .pband__stats {
+    display: flex;
+    gap: 2.2rem;
+    justify-content: flex-end;
+  }
+  .pband__stats div b {
+    display: block;
+    font-weight: 300;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .pband__stats div span {
+    color: var(--mute);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .filt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2.5rem;
+    padding-top: 1.6rem;
+  }
+  .filt__g {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filt__g > span {
+    font-size: 0.85rem;
+    color: var(--mute);
+    margin-inline-end: 0.3rem;
+  }
+  .filt__n {
+    margin-inline-start: auto;
+    color: var(--mute);
+    font-size: 0.92rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .pgrid {
+    padding: 2.5rem 0 clamp(4rem, 8vw, 7rem);
+  }
+  .pj__g {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.6rem 1.4rem;
+  }
+  .pj {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity 0.7s var(--ease),
+      transform 0.9s var(--ease);
+  }
+  .pj.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  .pj[hidden] {
+    display: none;
+  }
+  .pj__fig {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: var(--r-s);
+    overflow: hidden;
+    background: var(--surf);
+    cursor: none;
+    text-align: right;
+    color: #fff;
+  }
+  .pj__fig img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.3s var(--ease);
+  }
+  .pj:hover .pj__fig img {
+    transform: scale(1.06);
+  }
+  .pj__ph {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, rgba(47, 122, 69, 0.28), rgba(0, 0, 0, 0.1)), var(--surf-2);
+  }
+  .pj__ph img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    opacity: 0.55;
+    transition: none;
+  }
+  .pj__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.55) 80%);
+    pointer-events: none;
+  }
+  .pj__st {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+  }
+  .pj__on {
+    position: absolute;
+    right: 1.1rem;
+    left: 1.1rem;
+    bottom: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .pj__name {
+    display: block;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    line-height: 1.35;
+  }
+  .pj__where {
+    display: block;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin-top: 0.2rem;
+  }
+  .pj__go {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    color: #0e1a13;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    opacity: 0;
+    transform: scale(0.5);
+    transition:
+      opacity 0.4s,
+      transform 0.5s var(--ease);
+  }
+  .pj__go svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transform: rotate(-45deg);
+  }
+  .pj:hover .pj__go {
+    opacity: 1;
+    transform: none;
+  }
+  .pj__kf {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.6rem;
+    padding: 1rem 0.2rem 0;
+  }
+  .pj__kf div {
+    border-inline-end: 1px solid var(--line);
+    padding-inline-end: 0.6rem;
+  }
+  .pj__kf div:last-child {
+    border: 0;
+  }
+  .pj__kf dd {
+    font-weight: 400;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .pj__kf dt {
+    color: var(--mute);
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+  .pj__empty {
+    padding: 4rem 0;
+    text-align: center;
+    color: var(--mute);
+  }
+  .pm {
+    position: fixed;
+    inset: 0;
+    z-index: 950;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .pm.is-on {
+    display: flex;
+  }
+  .pm__bd {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .pm__box {
+    position: relative;
+    width: min(1180px, 100%);
+    max-height: calc(100vh - 3rem);
+    overflow: auto;
+    background: var(--bg);
+    color: var(--ink);
+    border-radius: var(--r);
+    box-shadow: 0 60px 120px -30px rgba(0, 0, 0, 0.8);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    transform: translateY(24px) scale(0.98);
+    opacity: 0;
+    transition:
+      transform 0.6s var(--ease),
+      opacity 0.4s;
+  }
+  .pm.is-on .pm__box {
+    transform: none;
+    opacity: 1;
+  }
+  .pm__gal {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #000;
+    overflow: hidden;
+  }
+  .pm__gal img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+  .pm__gal img.is-on {
+    opacity: 1;
+  }
+  .pm__gal .pj__ph {
+    position: absolute;
+  }
+  .pm__nav {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+  }
+  .pm__nav .ctrl button {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+  }
+  .pm__cnt {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-inline-start: 0.4rem;
+  }
+  .pm__info {
+    padding: clamp(1.5rem, 3vw, 2.6rem);
+  }
+  .pm__info h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.3;
+    margin: 0.8rem 0 0.3rem;
+  }
+  .pm__where {
+    color: var(--ink-2);
+    font-weight: 300;
+    margin-bottom: 1.4rem;
+  }
+  .pm__kf {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+    padding: 1.2rem 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 1.4rem;
+  }
+  .pm__kf dd {
+    font-weight: 300;
+    font-size: 1.6rem;
+    line-height: 1.35;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .pm__kf dd small {
+    font-size: 1rem;
+  }
+  .pm__kf dt {
+    color: var(--mute);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .pm__d {
+    color: var(--ink-2);
+    font-weight: 300;
+    line-height: 1.85;
+    margin-bottom: 1.6rem;
+  }
+  .pm__act {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.6rem;
+  }
+  .pm__x {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 3;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  .pm__x:hover {
+    background: #fff;
+    color: #000;
+  }
+  .pm__cta .abtn__t,
+  .pm__cta .abtn__c {
+    background: var(--pill-bg);
+  }
+  [data-theme='light'] .pj__fig .pj__ph img {
+    opacity: 0.7;
+  }
+  body.is-projects {
+    background: var(--bg);
+  }
+  body.is-projects .aura {
+    position: fixed;
+    z-index: 0;
+  }
+  body.is-projects main,
+  body.is-projects .foot {
+    position: relative;
+    z-index: 2;
+  }
+}

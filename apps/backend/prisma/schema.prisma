@@ -1,0 +1,442 @@
+// Prisma 7: the connection URL lives in prisma.config.ts; the runtime connects through
+// the MariaDB driver adapter (compatible with MySQL 8), see src/lib/prisma.ts.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// Sales status shown on the website (projects page filters).
+enum ProjectStatus {
+  AVAILABLE
+  UNDER_CONSTRUCTION
+  COMING_SOON
+  SOLD_OUT
+}
+
+/// Role of an image inside a project's media set.
+enum ProjectImageCategory {
+  COVER
+  GALLERY
+  FLOOR_PLAN
+}
+
+/// Predefined section blocks. The website renders each type with a fixed component;
+/// `content` holds that type's structured fields (see `sections.schema.ts`).
+enum SectionType {
+  HERO
+  ABOUT
+  STATS
+  PROJECTS_SHOWCASE
+  SERVICES
+  LEADERSHIP
+  CONTACT
+  INTEREST_FORM
+  PARTNERS
+  CTA
+  RICH_TEXT
+  TIMELINE
+  VISION
+  MISSION
+  STORY
+  BRANCHES
+  CONTACT_INFO
+  MAP
+  INTRO
+}
+
+enum LeadInterest {
+  OWN
+  INVEST
+  OWNER_SERVICES
+  PARTNERSHIP
+  JOB
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CONVERTED
+  LOST
+}
+
+enum LeadSource {
+  WEBSITE
+  CONTACT_FORM
+  PROJECT_PAGE
+}
+
+enum Locale {
+  ar
+  en
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+
+model User {
+  id                String    @id @default(uuid(7)) @db.Char(36)
+  name              String    @db.VarChar(120)
+  email             String    @unique @db.VarChar(191)
+  passwordHash      String    @map("password") @db.VarChar(255)
+  role              Role      @default(EDITOR)
+  /// Account status: inactive users cannot sign in and their tokens stop working.
+  isActive          Boolean   @default(true)
+  lastLoginAt       DateTime?
+  /// Tokens issued before this moment are rejected (set on password change / reset).
+  passwordChangedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  uploads       Media[]
+  assignedLeads Lead[]
+  auditLogs     AuditLog[]
+
+  @@index([role])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// ─── Audit log ────────────────────────────────────────────────────────────────
+
+/// One create / update / delete made through the API. `userName`/`userEmail` keep the actor readable
+/// after the account is removed; `userId` is null for website submissions (e.g. new leads).
+/// Updates store only the fields that changed, in `oldData` and `newData`.
+model AuditLog {
+  id          String      @id @default(uuid(7)) @db.Char(36)
+  userId      String?     @db.Char(36)
+  userName    String?     @db.VarChar(120)
+  userEmail   String?     @db.VarChar(191)
+  userRole    Role?
+  action      AuditAction
+  /// Module name, e.g. `projects`, `settings`.
+  entity      String      @db.VarChar(40)
+  /// Row id, or the key for settings.
+  entityId    String      @db.VarChar(191)
+  /// Human-readable name of the record at the time of the change.
+  entityLabel String?     @db.VarChar(255)
+  oldData     Json?
+  newData     Json?
+  ipAddress   String?     @db.VarChar(45)
+  createdAt   DateTime    @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([entity, entityId])
+  @@index([userId, createdAt])
+  @@index([action])
+  @@map("audit_logs")
+}
+
+// ─── Media library ────────────────────────────────────────────────────────────
+
+model Media {
+  id           String    @id @default(uuid(7)) @db.Char(36)
+  filename     String    @unique @db.VarChar(191)
+  originalName String    @db.VarChar(255)
+  url          String    @db.VarChar(500)
+  mimeType     String    @db.VarChar(100)
+  size         Int
+  width        Int?
+  height       Int?
+  altAr        String?   @db.VarChar(255)
+  altEn        String?   @db.VarChar(255)
+  uploadedById String?   @db.Char(36)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  sections         Section[]
+  pageOgImages     Page[]         @relation("PageOgImage")
+  projectCovers    Project[]      @relation("ProjectCover")
+  projectImages    ProjectImage[]
+  services         Service[]
+  teamMemberPhotos TeamMember[]
+  partnerLogos     Partner[]
+
+  @@index([mimeType])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([uploadedById])
+  @@map("media")
+}
+
+// ─── Settings (key/value) ─────────────────────────────────────────────────────
+
+/// Global website settings, e.g. `branding.logo` → { mediaId }, `contact.phone` → "920019105",
+/// `social.links` → [{ platform, url }], `footer.content` → { ar, en }.
+model Setting {
+  id          String   @id @default(uuid(7)) @db.Char(36)
+  key         String   @unique @db.VarChar(120)
+  group       String   @default("general") @db.VarChar(60)
+  value       Json
+  isPublic    Boolean  @default(true)
+  description String?  @db.VarChar(255)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([group])
+  @@map("settings")
+}
+
+// ─── Pages & sections ─────────────────────────────────────────────────────────
+
+model Page {
+  id                String        @id @default(uuid(7)) @db.Char(36)
+  slug              String        @unique @db.VarChar(120)
+  titleAr           String        @db.VarChar(255)
+  titleEn           String        @db.VarChar(255)
+  metaTitleAr       String?       @db.VarChar(255)
+  metaTitleEn       String?       @db.VarChar(255)
+  metaDescriptionAr String?       @db.VarChar(320)
+  metaDescriptionEn String?       @db.VarChar(320)
+  ogImageId         String?       @db.Char(36)
+  status            PublishStatus @default(DRAFT)
+  publishedAt       DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  deletedAt         DateTime?
+
+  ogImage  Media?    @relation("PageOgImage", fields: [ogImageId], references: [id], onDelete: SetNull)
+  sections Section[]
+
+  @@index([status])
+  @@index([deletedAt])
+  @@index([ogImageId])
+  @@map("pages")
+}
+
+model Section {
+  id        String      @id @default(uuid(7)) @db.Char(36)
+  pageId    String      @db.Char(36)
+  type      SectionType
+  titleAr   String?     @db.VarChar(255)
+  titleEn   String?     @db.VarChar(255)
+  contentAr Json?
+  contentEn Json?
+  /// Bilingual structured fields (`*Ar`/`*En` pairs, media ids), validated per `type`.
+  content   Json?
+  imageId   String?     @db.Char(36)
+  order     Int         @default(0)
+  visible   Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  page  Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  image Media? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  @@index([pageId, order])
+  @@index([type])
+  @@index([imageId])
+  @@map("sections")
+}
+
+// ─── Projects ─────────────────────────────────────────────────────────────────
+
+model Project {
+  id                String        @id @default(uuid(7)) @db.Char(36)
+  slug              String        @unique @db.VarChar(160)
+  titleAr           String        @db.VarChar(255)
+  titleEn           String        @db.VarChar(255)
+  summaryAr         String?       @db.VarChar(500)
+  summaryEn         String?       @db.VarChar(500)
+  descriptionAr     String?       @db.Text
+  descriptionEn     String?       @db.Text
+  city              String        @db.VarChar(60)
+  locationAr        String?       @db.VarChar(255)
+  locationEn        String?       @db.VarChar(255)
+  status            ProjectStatus @default(COMING_SOON)
+  publishStatus     PublishStatus @default(DRAFT)
+  featured          Boolean       @default(false)
+  order             Int           @default(0)
+  /// Number of residential units.
+  unitsCount        Int?          @db.UnsignedInt
+  /// Unit sizes in m²: `{ "min": number, "max": number }`.
+  sizeRange         Json?
+  /// Handover year (actual or expected, depending on `status`).
+  completionYear    Int?          @db.UnsignedSmallInt
+  /// Ordered list of `{ icon, titleAr, titleEn, bodyAr?, bodyEn? }`.
+  features          Json?
+  latitude          Decimal?      @db.Decimal(9, 6)
+  longitude         Decimal?      @db.Decimal(9, 6)
+  /// SEO overrides; the website falls back to the title / summary when empty.
+  metaTitleAr       String?       @db.VarChar(255)
+  metaTitleEn       String?       @db.VarChar(255)
+  metaDescriptionAr String?       @db.VarChar(500)
+  metaDescriptionEn String?       @db.VarChar(500)
+  coverImageId      String?       @db.Char(36)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  deletedAt         DateTime?
+
+  coverImage Media?         @relation("ProjectCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+  gallery    ProjectImage[]
+  leads      Lead[]
+
+  @@index([publishStatus, status])
+  @@index([city])
+  @@index([featured, order])
+  @@index([deletedAt])
+  @@index([coverImageId])
+  @@map("projects")
+}
+
+model ProjectImage {
+  id        String               @id @default(uuid(7)) @db.Char(36)
+  projectId String               @db.Char(36)
+  mediaId   String               @db.Char(36)
+  category  ProjectImageCategory @default(GALLERY)
+  captionAr String?              @db.VarChar(255)
+  captionEn String?              @db.VarChar(255)
+  order     Int                  @default(0)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  media   Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  /// The same media may appear once per category (e.g. a render as cover and in the gallery).
+  @@unique([projectId, mediaId, category])
+  @@index([projectId, category, order])
+  @@index([mediaId])
+  @@map("project_images")
+}
+
+// ─── Services, team, partners ─────────────────────────────────────────────────
+
+model Service {
+  id                String        @id @default(uuid(7)) @db.Char(36)
+  slug              String        @unique @db.VarChar(160)
+  titleAr           String        @db.VarChar(255)
+  titleEn           String        @db.VarChar(255)
+  /// One-line pitch shown in the services accordion row and the detail page hero.
+  summaryAr         String?       @db.VarChar(500)
+  summaryEn         String?       @db.VarChar(500)
+  descriptionAr     String?       @db.Text
+  descriptionEn     String?       @db.Text
+  icon              String?       @db.VarChar(80)
+  imageId           String?       @db.Char(36)
+  order             Int           @default(0)
+  status            PublishStatus @default(DRAFT)
+  /// SEO overrides; the website falls back to the title / summary when empty.
+  metaTitleAr       String?       @db.VarChar(255)
+  metaTitleEn       String?       @db.VarChar(255)
+  metaDescriptionAr String?       @db.VarChar(500)
+  metaDescriptionEn String?       @db.VarChar(500)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  deletedAt         DateTime?
+
+  image Media? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  @@index([status, order])
+  @@index([deletedAt])
+  @@index([imageId])
+  @@map("services")
+}
+
+model TeamMember {
+  id         String    @id @default(uuid(7)) @db.Char(36)
+  nameAr     String    @db.VarChar(160)
+  nameEn     String    @db.VarChar(160)
+  positionAr String    @db.VarChar(160)
+  positionEn String    @db.VarChar(160)
+  bioAr      String?   @db.Text
+  bioEn      String?   @db.Text
+  photoId    String?   @db.Char(36)
+  order      Int       @default(0)
+  visible    Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  photo Media? @relation(fields: [photoId], references: [id], onDelete: SetNull)
+
+  @@index([visible, order])
+  @@index([deletedAt])
+  @@index([photoId])
+  @@map("team_members")
+}
+
+model Partner {
+  id         String    @id @default(uuid(7)) @db.Char(36)
+  nameAr     String    @db.VarChar(160)
+  nameEn     String    @db.VarChar(160)
+  websiteUrl String?   @db.VarChar(500)
+  logoId     String?   @db.Char(36)
+  order      Int       @default(0)
+  visible    Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  logo Media? @relation(fields: [logoId], references: [id], onDelete: SetNull)
+
+  @@index([visible, order])
+  @@index([deletedAt])
+  @@index([logoId])
+  @@map("partners")
+}
+
+// ─── Leads (interest form) ────────────────────────────────────────────────────
+
+model Lead {
+  id           String        @id @default(uuid(7)) @db.Char(36)
+  name         String        @db.VarChar(160)
+  phone        String        @db.VarChar(32)
+  email        String?       @db.VarChar(191)
+  city         String?       @db.VarChar(60)
+  interestType LeadInterest?
+  message      String?       @db.Text
+  projectId    String?       @db.Char(36)
+  locale       Locale        @default(ar)
+  source       LeadSource    @default(WEBSITE)
+  status       LeadStatus    @default(NEW)
+  notes        String?       @db.Text
+  assignedToId String?       @db.Char(36)
+  ipAddress    String?       @db.VarChar(45)
+  userAgent    String?       @db.VarChar(500)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+
+  project    Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  assignedTo User?    @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([projectId])
+  @@index([assignedToId])
+  @@index([phone])
+  @@index([deletedAt])
+  @@map("leads")
+}

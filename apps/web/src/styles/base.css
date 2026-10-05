@@ -1,0 +1,99 @@
+/* Base reset — verbatim from the design source ("الأساس"), layered after Tailwind preflight. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  html.no-scroll {
+    overflow: hidden;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    transition:
+      background-color 0.5s var(--ease),
+      color 0.5s var(--ease);
+  }
+  img,
+  video,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+  }
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+  :focus-visible {
+    outline: 2px solid var(--g-300);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--g-500);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+  .wrap {
+    width: min(var(--wrap), 100% - 2 * var(--gut));
+    margin-inline: auto;
+  }
+  .sec {
+    padding-block: clamp(5rem, 10vw, 8.5rem);
+  }
+  .vh {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .sec {
+      padding-block: 4rem;
+    }
+  }
+}

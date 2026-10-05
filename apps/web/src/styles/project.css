@@ -1,0 +1,1168 @@
+/* Project details — overview, gallery + lightbox, information, location map, interest CTA. */
+@layer components {
+  /* ───────────── Overview ───────────── */
+  .pov__g {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+    align-items: start;
+    gap: clamp(2.5rem, 6vw, 6rem);
+  }
+  .pov__p {
+    max-width: 58ch;
+    color: var(--ink-2);
+    font-weight: 300;
+    font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+    line-height: 1.95;
+  }
+  .pov__p + .pov__p {
+    margin-top: 1.2rem;
+  }
+  .pov__p--lead {
+    max-width: 34ch;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.35rem, 2.3vw, 2.05rem);
+    line-height: 1.7;
+  }
+  .pov__facts {
+    position: sticky;
+    top: calc(var(--hdr) + 2rem);
+    overflow: hidden;
+    padding: clamp(1.4rem, 2.4vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--surf);
+    box-shadow: inset 0 1px 0 var(--gold-soft);
+  }
+  .pov__fh {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+    color: var(--gold);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  .pov__fh::before {
+    content: '';
+    width: 1.6rem;
+    height: 1px;
+    background: currentColor;
+  }
+  .pov__facts dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .pov__facts dt {
+    color: var(--mute);
+    font-size: 0.92rem;
+  }
+  .pov__facts dd {
+    font-weight: 500;
+    text-align: end;
+  }
+
+  .pstats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+  .pstat {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: clamp(1.5rem, 2.6vw, 2.2rem);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(47, 122, 69, 0.16), transparent 60%), var(--tint);
+    transition:
+      border-color 0.5s,
+      translate 0.6s var(--ease),
+      opacity 0.85s var(--ease) var(--d, 0ms),
+      transform 1.05s var(--ease) var(--d, 0ms);
+  }
+  [dir='ltr'] .pstat {
+    background:
+      radial-gradient(120% 90% at 0% 0%, rgba(47, 122, 69, 0.16), transparent 60%), var(--tint);
+  }
+  .pstat:hover {
+    border-color: var(--gold-soft);
+    translate: 0 -4px;
+  }
+  .pstat__v {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    direction: ltr;
+    font-weight: 300;
+    font-size: clamp(2.5rem, 4.6vw, 4.2rem);
+    line-height: 1.1;
+  }
+  [dir='ltr'] .pstat__v {
+    justify-content: flex-start;
+  }
+  .pstat__v b {
+    font-weight: 300;
+    background: linear-gradient(180deg, var(--ink) 30%, var(--gold) 140%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .pstat__v i {
+    color: var(--gold);
+    font-style: normal;
+    font-size: 0.6em;
+  }
+  .pstat__v small {
+    color: var(--gold);
+    font-size: 1rem;
+  }
+  .pstat__l {
+    color: var(--ink-2);
+    font-size: 1rem;
+  }
+  .pstat__n {
+    align-self: flex-start;
+    margin-top: 0.4rem;
+    padding: 0.25rem 0.7rem;
+    border: 1px solid var(--gold-soft);
+    border-radius: 999px;
+    color: var(--gold);
+    font-size: 0.78rem;
+  }
+  .pstat__bar {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    transform: scaleX(0);
+    transition: transform 1.4s var(--ease-io) calc(var(--i, 0) * 120ms + 400ms);
+  }
+  .pstat.is-in .pstat__bar {
+    transform: scaleX(1);
+  }
+
+  /* ───────────── Gallery ───────────── */
+  .pov + .pgal {
+    padding-top: 0;
+  }
+  .pgal__count {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--mute);
+    font-size: 1rem;
+  }
+  .pgal__count b {
+    color: var(--gold);
+    font-weight: 300;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1;
+  }
+  .pgal__count i {
+    width: 2.6rem;
+    height: 1px;
+    background: var(--line-2);
+  }
+  .pgal__g {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(200px, 19vw, 270px);
+    gap: clamp(0.9rem, 1.6vw, 1.3rem);
+  }
+  .pgal__g--single {
+    grid-template-columns: 1fr;
+  }
+  .pgal__stage {
+    aspect-ratio: 16/10;
+    cursor: pointer;
+    outline: none;
+    touch-action: pan-y;
+    user-select: none;
+  }
+  .pgal__stage:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--bg),
+      0 0 0 4px var(--gold);
+  }
+  .pgal__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.9s var(--ease),
+      visibility 0s linear 0.9s;
+  }
+  .pgal__slide.is-on {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.9s var(--ease),
+      visibility 0s;
+  }
+  .pgal__stage .pgal__slide img {
+    object-fit: cover;
+    transform: scale(1.1);
+    transition: transform 1.8s var(--ease);
+  }
+  .pgal__stage.is-in .pgal__slide img {
+    transform: scale(1.1);
+  }
+  .pgal__stage.is-in .pgal__slide.is-on img {
+    transform: none;
+  }
+  .pgal__shade {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      transparent 28%,
+      transparent 58%,
+      rgba(0, 0, 0, 0.62) 100%
+    );
+    pointer-events: none;
+  }
+  .pgal__cap {
+    position: absolute;
+    bottom: clamp(1rem, 2.4vw, 1.8rem);
+    inset-inline-start: clamp(1rem, 2.4vw, 1.8rem);
+    z-index: 2;
+    color: #fff;
+    font-family: var(--serif);
+    font-size: clamp(1.2rem, 2vw, 1.7rem);
+    pointer-events: none;
+  }
+  .pgal__cap span {
+    display: block;
+    animation: pgalCap 0.9s var(--ease) both;
+  }
+  @keyframes pgalCap {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  .pgal__btn {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background-color 0.35s,
+      border-color 0.35s,
+      transform 0.5s var(--ease);
+  }
+  .pgal__btn svg,
+  .plb__btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .pgal__btn:hover,
+  .pgal__btn:focus-visible {
+    border-color: var(--gold);
+    background: var(--pill-bg);
+    transform: scale(1.06);
+  }
+  .pgal__open {
+    position: absolute;
+    top: clamp(0.8rem, 2vw, 1.3rem);
+    inset-inline-end: clamp(0.8rem, 2vw, 1.3rem);
+    z-index: 2;
+  }
+  .pgal__nav {
+    position: absolute;
+    bottom: clamp(0.8rem, 2vw, 1.3rem);
+    inset-inline-end: clamp(0.8rem, 2vw, 1.3rem);
+    z-index: 2;
+    display: flex;
+    gap: 0.6rem;
+  }
+  /* ArrowIcon points left: "next" follows the reading direction. */
+  [dir='rtl'] .pgal__prev svg,
+  [dir='ltr'] .pgal__next svg,
+  [dir='rtl'] .plb__prev svg,
+  [dir='ltr'] .plb__next svg {
+    transform: scaleX(-1);
+  }
+  .pgal__thumbs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .pgal__thumb {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 0.7rem;
+    padding: 0.55rem 0.55rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--tint);
+    color: var(--ink-2);
+    text-align: start;
+    cursor: pointer;
+    transition:
+      border-color 0.4s,
+      color 0.4s,
+      opacity 0.85s var(--ease) var(--d, 0ms),
+      transform 1.05s var(--ease) var(--d, 0ms);
+  }
+  .pgal__thumb.is-in {
+    opacity: 0.62;
+  }
+  .pgal__thumb.is-in:hover,
+  .pgal__thumb.is-in.is-on {
+    opacity: 1;
+  }
+  .pgal__thumb.is-on {
+    border-color: var(--gold-soft);
+    color: var(--ink);
+  }
+  .pgal__tim {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    aspect-ratio: 16/10;
+    border-radius: 14px;
+  }
+  .pgal__tim img {
+    object-fit: cover;
+    transition: transform 1s var(--ease);
+  }
+  .pgal__thumb:hover .pgal__tim img {
+    transform: scale(1.08);
+  }
+  .pgal__tl {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    padding-inline: 0.3rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .pgal__tl b {
+    color: var(--gold);
+    font-weight: 500;
+    font-size: 0.78rem;
+  }
+  .pgal__prog {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.8s var(--ease-io);
+  }
+  [dir='ltr'] .pgal__prog {
+    transform-origin: left;
+  }
+  .pgal__thumb.is-on .pgal__prog {
+    transform: scaleX(1);
+  }
+
+  /* ───────────── Lightbox ───────────── */
+  .plb {
+    position: fixed;
+    inset: 0;
+    z-index: 950;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.5s var(--ease),
+      visibility 0s linear 0.5s;
+  }
+  .plb.is-on {
+    visibility: visible;
+    opacity: 1;
+    transition:
+      opacity 0.5s var(--ease),
+      visibility 0s;
+  }
+  .plb__bd {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 6, 4, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .plb__box {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 1rem;
+    height: 100%;
+    padding: clamp(1rem, 3vw, 2rem);
+    color: #fff;
+    pointer-events: none;
+  }
+  .plb__box > * {
+    pointer-events: auto;
+  }
+  .plb__top,
+  .plb__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .plb__count {
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+  }
+  .plb__count i {
+    color: var(--gold);
+    font-style: normal;
+  }
+  .plb__fig {
+    position: relative;
+    pointer-events: none;
+  }
+  .plb__img {
+    object-fit: contain;
+    animation: plbIn 0.8s var(--ease) both;
+  }
+  @keyframes plbIn {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  .plb__cap {
+    flex: 1;
+    font-family: var(--serif);
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    text-align: center;
+  }
+  .plb__dots {
+    display: flex;
+    gap: 0.45rem;
+  }
+  .plb__dots button {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition:
+      width 0.5s var(--ease),
+      background-color 0.3s;
+  }
+  .plb__dots button.is-on {
+    width: 26px;
+    background: var(--gold);
+  }
+  .plb__btn {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background-color 0.35s,
+      border-color 0.35s;
+  }
+  .plb__btn:hover,
+  .plb__btn:focus-visible {
+    border-color: var(--gold);
+    background: var(--pill-bg);
+  }
+
+  /* ───────────── Information ───────────── */
+  .pinfo {
+    border-block: 1px solid var(--line);
+    background:
+      radial-gradient(50% 60% at 0% 100%, rgba(201, 164, 92, 0.07), transparent 70%), var(--tint);
+  }
+  [dir='ltr'] .pinfo {
+    background:
+      radial-gradient(50% 60% at 100% 100%, rgba(201, 164, 92, 0.07), transparent 70%), var(--tint);
+  }
+  .pinfo__g {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+    align-items: start;
+    gap: clamp(3rem, 6vw, 6rem);
+  }
+  .pinfo__list {
+    border-top: 1px solid var(--line);
+  }
+  .pinfo__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pinfo__row dt {
+    color: var(--mute);
+  }
+  .pinfo__row dd {
+    font-weight: 500;
+    text-align: end;
+  }
+  .pinfo__row .st {
+    border-color: var(--line-2);
+    background: var(--surf);
+    color: var(--ink);
+  }
+  .pinfo__fh {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.6rem;
+    font-weight: 500;
+    font-size: 1.15rem;
+  }
+  .pinfo__fh i {
+    width: 2.4rem;
+    height: 1px;
+    background: var(--gold);
+  }
+  .pfeat {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.8rem, 1.4vw, 1.1rem);
+  }
+  .pfeat__it {
+    padding: clamp(1.3rem, 2vw, 1.7rem);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--surf);
+    transition:
+      border-color 0.45s,
+      opacity 0.85s var(--ease) var(--d, 0ms),
+      transform 1.05s var(--ease) var(--d, 0ms);
+  }
+  .pfeat__it:hover {
+    border-color: var(--gold-soft);
+  }
+  .pfeat__it:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  .pfeat__ic {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid var(--gold-soft);
+    border-radius: 50%;
+    color: var(--gold);
+    transition:
+      background-color 0.45s,
+      color 0.45s,
+      border-color 0.45s;
+  }
+  .pfeat__ic svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .pfeat__it:hover .pfeat__ic {
+    border-color: var(--gold);
+    background: var(--pill-bg);
+    color: #fff;
+  }
+  .pfeat__it h4 {
+    margin: 1rem 0 0.4rem;
+    font-weight: 600;
+    font-size: 1.08rem;
+    line-height: 1.5;
+  }
+  .pfeat__it p {
+    color: var(--mute);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  /* ───────────── Location ───────────── */
+  .ploc__g {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 5rem);
+  }
+  .ploc__meta {
+    margin-bottom: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .ploc__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .ploc__row dt {
+    color: var(--mute);
+  }
+  .ploc__row dd {
+    font-weight: 500;
+    text-align: end;
+  }
+  .ploc__pending {
+    color: var(--mute);
+    font-weight: 400;
+    font-size: 0.88rem;
+  }
+
+  .pmap {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    aspect-ratio: 16/11;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: color-mix(in srgb, var(--bg) 90%, var(--g-500));
+  }
+  .pmap__canvas,
+  .pmap__streets {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .pmap__canvas {
+    transform: scale(1.08);
+    transition: transform 2.4s var(--ease);
+  }
+  .pmap.is-in .pmap__canvas {
+    transform: none;
+  }
+  .pmap__blocks {
+    fill: color-mix(in srgb, var(--ink) 4%, transparent);
+  }
+  .pmap__park {
+    fill: rgba(47, 122, 69, 0.2);
+    opacity: 0;
+    transition: opacity 1.4s var(--ease) 0.9s;
+  }
+  .pmap.is-in .pmap__park {
+    opacity: 1;
+  }
+  .pmap__road {
+    fill: none;
+    stroke: color-mix(in srgb, var(--ink) 14%, transparent);
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 2s var(--ease-io);
+  }
+  .pmap__road--s {
+    stroke-width: 5;
+    transition-delay: 0.5s;
+  }
+  .pmap__road--r {
+    stroke: color-mix(in srgb, var(--gold) 40%, transparent);
+    stroke-width: 2;
+    stroke-dasharray: 1;
+    transition-delay: 0.3s;
+  }
+  .pmap__road--m {
+    stroke: color-mix(in srgb, var(--ink) 22%, transparent);
+    stroke-width: 15;
+  }
+  .pmap.is-in .pmap__road {
+    stroke-dashoffset: 0;
+  }
+  .pmap__vig {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(70% 70% at 50% 50%, transparent 40%, var(--bg) 120%);
+    pointer-events: none;
+  }
+  .pmap__marker {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    z-index: 2;
+    width: 0;
+    height: 0;
+  }
+  .pmap__pin {
+    position: absolute;
+    bottom: 0;
+    left: -22px;
+    width: 44px;
+    height: 57px;
+    opacity: 0;
+    transform: translateY(-70px);
+    filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
+  }
+  .pmap__pin svg {
+    width: 100%;
+    height: 100%;
+  }
+  .pmap__pin path {
+    fill: var(--pill-bg);
+    stroke: var(--gold);
+    stroke-width: 1.6;
+  }
+  .pmap__pin circle {
+    fill: var(--gold);
+  }
+  .pmap.is-in .pmap__pin {
+    animation: pmapDrop 0.95s cubic-bezier(0.3, 1.45, 0.5, 1) 0.8s both;
+  }
+  @keyframes pmapDrop {
+    from {
+      opacity: 0;
+      transform: translateY(-70px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .pmap__pulse {
+    position: absolute;
+    top: -30px;
+    left: -60px;
+    width: 120px;
+    height: 60px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+  }
+  .pmap.is-in .pmap__pulse {
+    animation: pmapPulse 2.6s var(--ease-io) 1.6s infinite;
+  }
+  .pmap.is-in .pmap__pulse + .pmap__pulse {
+    animation-delay: 2.9s;
+  }
+  @keyframes pmapPulse {
+    0% {
+      opacity: 0.9;
+      transform: scale(0.2);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+  .pmap__tag {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.86rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, 10px);
+    transition:
+      opacity 0.8s var(--ease) 1.5s,
+      transform 0.8s var(--ease) 1.5s;
+  }
+  .pmap.is-in .pmap__tag {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .pmap__inset {
+    position: absolute;
+    top: clamp(0.8rem, 2vw, 1.2rem);
+    inset-inline-end: clamp(0.8rem, 2vw, 1.2rem);
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+    width: clamp(104px, 13vw, 150px);
+    padding: 0.7rem 0.7rem 0.55rem;
+    border: 1px solid var(--line-2);
+    border-radius: 18px;
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-size: 0.78rem;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.9s var(--ease) 0.6s,
+      transform 0.9s var(--ease) 0.6s;
+  }
+  .pmap.is-in .pmap__inset {
+    opacity: 1;
+    transform: none;
+  }
+  .pmap__inset svg {
+    width: 100%;
+    height: auto;
+  }
+  .pmap__ksa {
+    fill: color-mix(in srgb, var(--ink) 10%, transparent);
+    stroke: color-mix(in srgb, var(--ink) 30%, transparent);
+    stroke-width: 4;
+  }
+  .pmap__idot {
+    fill: var(--gold);
+  }
+  .pmap__ihalo {
+    fill: var(--gold);
+    opacity: 0.25;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pmapHalo 2.4s var(--ease-io) infinite;
+  }
+  @keyframes pmapHalo {
+    50% {
+      opacity: 0.08;
+      transform: scale(1.5);
+    }
+  }
+  .pmap__chip {
+    position: absolute;
+    bottom: clamp(0.8rem, 2vw, 1.2rem);
+    inset-inline-start: clamp(0.8rem, 2vw, 1.2rem);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-size: 0.82rem;
+  }
+  .pmap__chip i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--g-400, #4caf6e);
+    box-shadow: 0 0 0 4px rgba(76, 175, 110, 0.2);
+  }
+
+  /* ───────────── Interest CTA ───────────── */
+  .pcta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    width: min(var(--wrap), 100% - 2 * var(--gut));
+    margin: clamp(2rem, 5vw, 4rem) auto;
+    border-radius: var(--r);
+    background: #050807;
+    color: #fff;
+  }
+  .pcta .pcta__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    aspect-ratio: auto;
+    border-radius: 0;
+    pointer-events: none;
+  }
+  .pcta .pcta__bg img {
+    opacity: 0.6;
+  }
+  .pcta__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(60% 80% at 100% 100%, rgba(38, 106, 67, 0.5), transparent 70%),
+      linear-gradient(
+        270deg,
+        rgba(0, 0, 0, 0.88) 0%,
+        rgba(0, 0, 0, 0.55) 55%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+  }
+  [dir='ltr'] .pcta__shade {
+    background:
+      radial-gradient(60% 80% at 0% 100%, rgba(38, 106, 67, 0.5), transparent 70%),
+      linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.88) 0%,
+        rgba(0, 0, 0, 0.55) 55%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+  }
+  .pcta__g {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+    align-items: end;
+    gap: clamp(2rem, 5vw, 5rem);
+    min-height: min(640px, 80svh);
+    padding: clamp(3rem, 7vw, 6.5rem) clamp(1.5rem, 5vw, 5rem);
+  }
+  .pcta .lbl {
+    color: #fff;
+  }
+  .pcta__h {
+    max-width: 14ch;
+    color: #fff;
+  }
+  .pcta__body {
+    max-width: 48ch;
+    margin: 1.2rem 0 2.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.25vw, 1.15rem);
+    line-height: 1.9;
+  }
+  .pcta__acts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.2rem 2.2rem;
+  }
+  .pcta__alt {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.8rem;
+  }
+  .pcta__link {
+    position: relative;
+    display: grid;
+    gap: 0.1rem;
+    padding-bottom: 0.3rem;
+  }
+  .pcta__link span {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+  }
+  .pcta__link b {
+    font-weight: 500;
+    font-size: 1.05rem;
+    transition: color 0.3s;
+  }
+  .pcta__link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s var(--ease);
+  }
+  [dir='ltr'] .pcta__link::after {
+    transform-origin: left;
+  }
+  .pcta__link:hover b {
+    color: var(--gold-l);
+  }
+  .pcta__link:hover::after {
+    transform: scaleX(1);
+  }
+  .pcta__card {
+    padding: clamp(1.4rem, 2.4vw, 2rem);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: calc(var(--r) - 6px);
+    background: rgba(8, 12, 10, 0.5);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: inset 0 1px 0 rgba(201, 164, 92, 0.45);
+  }
+  .pcta__card h3 {
+    margin: 1rem 0 0.2rem;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  }
+  .pcta__card p {
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.92rem;
+  }
+  .pcta__card dl > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .pcta__card dt {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.88rem;
+  }
+  .pcta__card dd {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    font-size: 1.1rem;
+  }
+  .pcta__card dd small {
+    color: var(--gold-l);
+    font-size: 0.75rem;
+  }
+
+  /* Contact form: project carried over from a project page */
+  .lead__proj {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.7rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--gold-soft);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--gold) 8%, transparent);
+    animation: pgalCap 0.8s var(--ease) both;
+  }
+  .lead__proj span {
+    color: var(--mute);
+    font-size: 0.8rem;
+  }
+  .lead__proj b {
+    font-weight: 600;
+  }
+  .lead__proj button {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-inline-start: auto;
+    border: 1px solid var(--line-2);
+    border-radius: 50%;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition:
+      border-color 0.3s,
+      color 0.3s;
+  }
+  .lead__proj button:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .lead__proj svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  /* ───────────── Responsive ───────────── */
+  @media (max-width: 1100px) {
+    .pov__g,
+    .pinfo__g,
+    .ploc__g,
+    .pcta__g {
+      grid-template-columns: 1fr;
+    }
+    .pov__facts {
+      position: static;
+    }
+    .pcta__g {
+      min-height: 0;
+    }
+  }
+  @media (max-width: 900px) {
+    .pgal__g {
+      grid-template-columns: 1fr;
+    }
+    .pgal__thumbs {
+      flex-direction: row;
+      overflow-x: auto;
+      padding-bottom: 0.4rem;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .pgal__thumb {
+      flex: 0 0 min(44%, 220px);
+      scroll-snap-align: start;
+    }
+  }
+  @media (max-width: 760px) {
+    .pstats {
+      grid-template-columns: 1fr;
+    }
+    .pfeat {
+      grid-template-columns: 1fr;
+    }
+    .pgal__stage {
+      aspect-ratio: 4/5;
+    }
+    .pgal__btn {
+      width: 42px;
+      height: 42px;
+    }
+    .pmap {
+      aspect-ratio: 4/5;
+    }
+    .plb__cap {
+      display: none;
+    }
+    .pcta {
+      width: 100%;
+      border-radius: 0;
+    }
+  }
+  .perf-lite .pmap__pulse,
+  .perf-lite .pmap__ihalo {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pmap.is-in .pmap__pin,
+    .pmap.is-in .pmap__pulse,
+    .pmap__ihalo,
+    .pgal__cap span,
+    .plb__img,
+    .lead__proj {
+      animation: none;
+    }
+    .pmap__pin,
+    .pmap__tag,
+    .pmap__inset {
+      opacity: 1;
+      transform: none;
+    }
+    .pmap__tag {
+      transform: translate(-50%, 0);
+    }
+    .pmap__road {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+    .pgal__slide,
+    .pgal__stage .pgal__slide img,
+    .pstat__bar {
+      transition: none;
+    }
+  }
+}

@@ -1,0 +1,422 @@
+/* Shared vocabulary — verbatim from the design source ("المفردات المشتركة", "ظهور العناصر", "العملة"). */
+@layer components {
+  .lbl {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+  .lbl__i {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: url('/images/brand/logo-seal-192.png') center/cover no-repeat;
+    box-shadow: 0 0 0 1px var(--line);
+  }
+  .big {
+    font-weight: 300;
+    font-size: clamp(2.4rem, 4.8vw, 4.3rem);
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    padding-block: 0.06em;
+  }
+  .stmt {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 4.6vw, 4rem);
+    line-height: 1.35;
+    max-width: 22ch;
+    padding-block: 0.04em;
+  }
+  [data-split] .w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding: 0.22em 0.05em 0.2em;
+    margin: -0.22em -0.05em -0.2em;
+  }
+  [data-split] .w > span {
+    display: inline-block;
+    transform: translateY(118%);
+    transition: transform 1.05s var(--ease);
+  }
+  [data-split].is-in .w > span {
+    transform: none;
+  }
+  .lede {
+    color: var(--ink-2);
+    font-weight: 300;
+    font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+    line-height: 1.9;
+    max-width: 62ch;
+  }
+
+  /* Arrow button + pill */
+  .abtn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-inline-start: 64px;
+    color: #fff;
+    transition: padding 0.5s var(--ease);
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .abtn__c {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 50%;
+    translate: 0 -50%;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--pill-bg);
+    display: grid;
+    place-items: center;
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.5s var(--ease),
+      background-color 0.3s;
+  }
+  .abtn__c svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .abtn__c--e {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    opacity: 0;
+    transform: scale(0);
+  }
+  .abtn__t {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 135px;
+    height: 56px;
+    padding: 0 2.5rem;
+    border-radius: 999px;
+    background: var(--pill-bg);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+  @media (hover: hover) {
+    .abtn:hover {
+      padding-inline-start: 0;
+      padding-inline-end: 64px;
+    }
+    .abtn:hover .abtn__c:not(.abtn__c--e) {
+      opacity: 0;
+      transform: scale(0);
+    }
+    .abtn:hover .abtn__c--e {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .abtn--w .abtn__c,
+  .abtn--w .abtn__t {
+    background: #fff;
+    color: #0e1a13;
+  }
+  .abtn--w .abtn__c svg {
+    stroke: #0e1a13;
+  }
+  .abtn--sm {
+    padding-inline-start: 52px;
+  }
+  .abtn--sm .abtn__c {
+    width: 44px;
+    height: 44px;
+  }
+  .abtn--sm .abtn__t {
+    height: 44px;
+    min-width: 110px;
+    padding: 0 1.6rem;
+    font-size: 0.92rem;
+  }
+  @media (hover: hover) {
+    .abtn--sm:hover {
+      padding-inline-end: 52px;
+    }
+  }
+  .abtn--lg .abtn__c {
+    width: 64px;
+    height: 64px;
+  }
+  .abtn--lg .abtn__t {
+    height: 64px;
+    padding: 0 3rem;
+    font-size: 1.08rem;
+  }
+  .abtn--lg {
+    padding-inline-start: 72px;
+  }
+  @media (hover: hover) {
+    .abtn--lg:hover {
+      padding-inline-end: 72px;
+    }
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 48px;
+    padding: 0 1.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-2);
+    font-weight: 500;
+    font-size: 0.98rem;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 0.35s var(--ease),
+      color 0.35s var(--ease),
+      border-color 0.35s var(--ease),
+      transform 0.35s var(--ease);
+  }
+  .pill:hover {
+    background: var(--surf-2);
+    border-color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .pill--fill {
+    background: var(--pill-bg);
+    border-color: var(--pill-bg);
+    color: var(--pill-ink);
+  }
+  .pill--fill:hover {
+    background: var(--pill-bg-h);
+    border-color: var(--pill-bg-h);
+    color: #fff;
+  }
+  .pill--w {
+    width: 100%;
+  }
+
+  .ctrl {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .ctrl button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+    display: grid;
+    place-items: center;
+    transition:
+      background-color 0.3s,
+      border-color 0.3s;
+  }
+  .ctrl button svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ctrl button:hover {
+    background: var(--pill-bg);
+    border-color: var(--pill-bg);
+    color: #fff;
+  }
+  .ctrl button:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* Chips (lead form, project filters) */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .chip {
+    padding: 0.42rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-2);
+    font-size: 0.86rem;
+    font-weight: 500;
+    transition:
+      background-color 0.3s,
+      color 0.3s,
+      border-color 0.3s,
+      transform 0.3s var(--ease);
+  }
+  .chip:hover {
+    border-color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--pill-bg);
+    border-color: var(--pill-bg);
+    color: #fff;
+  }
+
+  /* Project status badge */
+  .st {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    font-size: 0.86rem;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .st s {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #7ccb93;
+    text-decoration: none;
+    animation: pulse 2s infinite;
+  }
+  .st--cn s {
+    background: #f2c14e;
+  }
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+    }
+    100% {
+      box-shadow: 0 0 0 9px rgba(255, 255, 255, 0);
+    }
+  }
+
+  /* Reveal */
+  .rv {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.85s var(--ease),
+      transform 1.05s var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+  .rv.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  .rv--s {
+    transform: translateY(18px) scale(0.97);
+  }
+  .rv--r {
+    transform: translateX(34px);
+  }
+  .rise {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.8s var(--ease),
+      transform 1s var(--ease);
+  }
+  .rise.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* 3D coin (logo) */
+  .coin {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .coin__in {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+  .coin__lay,
+  .coin__f,
+  .coin__b {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    backface-visibility: hidden;
+  }
+  .coin__lay {
+    background: #1a3a1d;
+  }
+  .coin__f,
+  .coin__b {
+    background: url('/images/brand/logo-seal-760.png') center/100% 100% no-repeat;
+  }
+  .coin__gl {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .coin__gl::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    bottom: -30%;
+    width: 46%;
+    left: -60%;
+    background: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0)
+    );
+    will-change: transform;
+    animation: gloss 7.5s ease-in-out infinite;
+  }
+  [data-theme='dark'] .coin__gl::after {
+    mix-blend-mode: screen;
+  }
+  @keyframes gloss {
+    0%,
+    58% {
+      transform: translate3d(0, 0, 0);
+    }
+    92%,
+    100% {
+      transform: translate3d(370%, 0, 0);
+    }
+  }
+  .coin__halo {
+    position: absolute;
+    inset: -10%;
+    border-radius: 50%;
+    border: 1px solid rgba(124, 203, 147, 0.32);
+    box-shadow:
+      0 0 70px rgba(47, 122, 69, 0.5),
+      inset 0 0 44px rgba(47, 122, 69, 0.25);
+    will-change: transform, opacity;
+    animation: haloPulse 5.5s ease-in-out infinite;
+  }
+  @keyframes haloPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+  }
+}

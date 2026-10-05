@@ -1,0 +1,21 @@
+/* Circular theme reveal from the toggle button — verbatim from the design source. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+  animation: vt 0.8s var(--ease-io);
+}
+@keyframes vt {
+  from {
+    clip-path: circle(0 at var(--vt-x, 90%) var(--vt-y, 40px));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 90%) var(--vt-y, 40px));
+  }
+}

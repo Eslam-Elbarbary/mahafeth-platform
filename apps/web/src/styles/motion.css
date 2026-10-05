@@ -1,0 +1,88 @@
+/* Reduced motion + automatic quality tiers (set by lib/motion/perf-guard) — verbatim. */
+@layer components {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001s !important;
+      scroll-behavior: auto !important;
+    }
+    .rise,
+    .rv,
+    [data-split] .w > span,
+    .hero .rv,
+    .hero__logo .coin,
+    .hero__h .ln > span,
+    .intro__name .w > span {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .rfig path,
+    .rfig circle,
+    .rfig rect {
+      stroke-dashoffset: 0;
+    }
+    .sl {
+      clip-path: none;
+    }
+    .sl__name h3,
+    .sl__name p,
+    .sl__kf div,
+    .sl__top > * {
+      opacity: 1;
+      transform: none;
+    }
+    .pfm,
+    .q__pics {
+      clip-path: none;
+      transform: none;
+    }
+    .q__it {
+      opacity: 1;
+    }
+    .pj {
+      opacity: 1;
+      transform: none;
+    }
+    .aura__o,
+    .aura__beam,
+    .aura__grid,
+    .aura__sp,
+    .coin__halo,
+    .coin__gl::after,
+    .intro::before {
+      animation: none !important;
+    }
+    .aura__sp {
+      opacity: 0.5;
+    }
+  }
+
+  html.perf-mid .aura__grid {
+    animation: none;
+  }
+  html.perf-mid .aura__sp {
+    display: none;
+  }
+  html.perf-lite .aura__beam,
+  html.perf-lite .aura__grid,
+  html.perf-lite .aura__sp {
+    display: none;
+  }
+  html.perf-lite .aura__o--3,
+  html.perf-lite .aura__o--4 {
+    display: none;
+  }
+  html.perf-lite .aura__o {
+    animation-duration: 0s;
+    animation: none;
+  }
+  html.perf-lite .coin__gl::after {
+    animation: none;
+  }
+  html.perf-lite .sl__img img {
+    transform: none !important;
+  }
+}

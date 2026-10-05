@@ -1,0 +1,83 @@
+@import 'tailwindcss';
+@import '../styles/tokens.css';
+@import '../styles/base.css';
+@import '../styles/theme-transition.css';
+/* Scoped legacy stylesheets, in the design source's cascade order (style.css, then refinements.css). */
+@import '../styles/ui.css';
+@import '../styles/overlays.css';
+@import '../styles/layout.css';
+@import '../styles/home.css';
+@import '../styles/projects.css';
+@import '../styles/responsive.css';
+@import '../styles/motion.css';
+@import '../styles/refinements.css';
+@import '../styles/premium.css';
+@import '../styles/footer.css';
+@import '../styles/pages.css';
+@import '../styles/project.css';
+
+/*
+ * Breakpoints mirror the design source, which is desktop-first (max-width: 380/640/1000/1280).
+ * Use `max-*` variants: `max-md:` === `@media (width < 1001px)` === `(max-width: 1000px)`.
+ */
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-xs: 381px;
+  --breakpoint-sm: 641px;
+  --breakpoint-md: 1001px;
+  --breakpoint-lg: 1281px;
+}
+
+/* Tokens exposed as utilities; `inline` keeps them bound to the live CSS variables so theme switching works. */
+@theme inline {
+  --font-sans: var(--sans);
+  --font-serif: var(--serif);
+
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-tint: var(--tint);
+  --color-surf: var(--surf);
+  --color-surf-2: var(--surf-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-mute: var(--mute);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-brand: var(--brand);
+  --color-g-600: var(--g-600);
+  --color-g-500: var(--g-500);
+  --color-g-400: var(--g-400);
+  --color-g-300: var(--g-300);
+  --color-g-200: var(--g-200);
+  --color-g-100: var(--g-100);
+  --color-acc: var(--acc);
+  --color-pill: var(--pill-bg);
+  --color-pill-hover: var(--pill-bg-h);
+  --color-pill-ink: var(--pill-ink);
+  --color-glass: var(--glass);
+  --color-glass-line: var(--glass-line);
+  --color-card-fill: var(--card-fill);
+  --color-sheet: var(--sheet);
+
+  --ease-brand: var(--ease);
+  --ease-brand-io: var(--ease-io);
+
+  --radius-card: var(--r);
+  --radius-card-sm: var(--r-s);
+
+  --spacing-gut: var(--gut);
+  --spacing-hdr: var(--hdr);
+
+  --container-wrap: var(--wrap);
+}
+
+/* State variants used throughout the design source. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+@custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+@custom-variant fine-pointer {
+  @media (hover: hover) and (pointer: fine) {
+    @slot;
+  }
+}
+@custom-variant perf-mid (&:where(.perf-mid, .perf-mid *));
+@custom-variant perf-lite (&:where(.perf-lite, .perf-lite *));

@@ -1,0 +1,14 @@
+-- AlterTable
+ALTER TABLE `pages` ADD COLUMN `metaTitleAr` VARCHAR(255) NULL,
+    ADD COLUMN `metaTitleEn` VARCHAR(255) NULL,
+    ADD COLUMN `ogImageId` CHAR(36) NULL;
+
+-- AlterTable
+ALTER TABLE `sections` ADD COLUMN `content` JSON NULL,
+    MODIFY `type` ENUM('HERO', 'ABOUT', 'STATS', 'PROJECTS_SHOWCASE', 'SERVICES', 'LEADERSHIP', 'CONTACT', 'INTEREST_FORM', 'PARTNERS', 'CTA', 'RICH_TEXT', 'TIMELINE', 'VISION', 'MISSION', 'STORY', 'BRANCHES', 'CONTACT_INFO', 'MAP', 'INTRO') NOT NULL;
+
+-- CreateIndex
+CREATE INDEX `pages_ogImageId_idx` ON `pages`(`ogImageId`);
+
+-- AddForeignKey
+ALTER TABLE `pages` ADD CONSTRAINT `pages_ogImageId_fkey` FOREIGN KEY (`ogImageId`) REFERENCES `media`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

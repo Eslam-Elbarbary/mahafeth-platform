@@ -1,0 +1,24 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mahafeth-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: mahafeth
+      MYSQL_USER: mahafeth
+      MYSQL_PASSWORD: mahafeth
+      MYSQL_ROOT_PASSWORD: mahafeth-root
+    ports:
+      - '3306:3306'
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-pmahafeth-root']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mysql-data:

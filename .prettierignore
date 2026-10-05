@@ -1,0 +1,11 @@
+node_modules
+.next
+.turbo
+dist
+out
+coverage
+pnpm-lock.yaml
+apps/backend/src/generated
+apps/backend/prisma/migrations
+apps/web/src/fonts
+next-env.d.ts

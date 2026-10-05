@@ -1,0 +1,79 @@
+/* Design tokens — verbatim from the design source (assets/css/style.css + refinements.css).
+   Font families point at next/font variables instead of raw @font-face names. */
+:root {
+  --sans: var(--font-thmanyah-sans), system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  --serif: var(--font-thmanyah-serif), var(--font-thmanyah-sans), serif;
+  --bg: #000;
+  --bg-2: #000;
+  --tint: rgba(255, 255, 255, 0.03);
+  --surf: rgba(255, 255, 255, 0.045);
+  --surf-2: rgba(255, 255, 255, 0.08);
+  --ink: #f4f6f3;
+  --ink-2: #cfd7d2;
+  --mute: #8f9b94;
+  --line: rgba(255, 255, 255, 0.12);
+  --line-2: rgba(255, 255, 255, 0.24);
+  --brand: #1f4022;
+  --g-600: #26602f;
+  --g-500: #2f7a45;
+  --g-400: #3f9a59;
+  --g-300: #7ccb93;
+  --g-200: #b9e6c4;
+  --g-100: #e4f4e8;
+  --acc: var(--g-300);
+  --pill-bg: var(--g-500);
+  --pill-bg-h: var(--g-400);
+  --pill-ink: #fff;
+  --glass: rgba(8, 12, 10, 0.58);
+  --glass-line: rgba(255, 255, 255, 0.14);
+  --card-fill: rgba(63, 154, 89, 0.16);
+  --wrap: 1360px;
+  --gut: clamp(1.25rem, 4vw, 3.5rem);
+  --hdr: 96px;
+  --r: 28px;
+  --r-s: 18px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --aura-op: 1;
+  --sheet: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme='light'] {
+  --bg: #ebe2d1;
+  --bg-2: #e2d8c5;
+  --tint: rgba(12, 26, 18, 0.032);
+  --surf: rgba(12, 26, 18, 0.035);
+  --surf-2: rgba(12, 26, 18, 0.07);
+  --ink: #0e1a13;
+  --ink-2: #2e3b34;
+  --mute: #5f6d65;
+  --line: rgba(14, 26, 19, 0.12);
+  --line-2: rgba(14, 26, 19, 0.26);
+  --acc: #2f7a45;
+  --pill-bg: #1f4022;
+  --pill-bg-h: #2a5a31;
+  --pill-ink: #fff;
+  --glass: rgba(235, 226, 209, 0.9);
+  --glass-line: rgba(14, 26, 19, 0.12);
+  --card-fill: #ded9c6;
+  --aura-op: 0.42;
+  --sheet: rgba(235, 226, 209, 0.96);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+}
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (max-width: 1000px) {
+  :root {
+    --hdr: 84px;
+  }
+}
+@media (max-width: 640px) {
+  :root {
+    --r: 20px;
+  }
+}
