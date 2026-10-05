@@ -13,8 +13,10 @@
         "CMS_API_URL",
         "CMS_ENABLED",
         "CMS_MEDIA_URL",
-        "ALLOW_LOCAL_URLS"
-      ]
+        "ALLOW_LOCAL_URLS",
+        "REVALIDATE_SECRET"
+      ],
+      "passThroughEnv": ["VERCEL", "VERCEL_URL", "VERCEL_PROJECT_PRODUCTION_URL"]
     },
     "dev": {
       "dependsOn": ["db:generate"],
