@@ -65,10 +65,7 @@ const isPayload = (body: unknown): body is CmsItem<CmsPage> =>
 
 /** The published CMS page, or `null` when the bundled page should be used. */
 export const getPage = cache(async (slug: CmsPageSlug): Promise<CmsPage | null> => {
-  const result = await cmsFetch(`/pages/${slug}`, {
-    tags: ['cms:pages', `cms:page:${slug}`],
-    isValid: isPayload,
-  });
+  const result = await cmsFetch(`/pages/${slug}`, { isValid: isPayload });
   return result.state === 'ok' ? result.data.data : null;
 });
 

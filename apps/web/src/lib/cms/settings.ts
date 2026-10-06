@@ -28,7 +28,7 @@ const rows = (value: unknown) => (Array.isArray(value) ? value.filter(isObject) 
 
 /** Raw public settings from the CMS, or `null` when it is disabled or unreachable. */
 export const getPublicSettings = cache(async (): Promise<CmsSettings | null> => {
-  const result = await cmsFetch('/settings', { tags: ['cms:settings'], isValid: isPayload });
+  const result = await cmsFetch('/settings', { isValid: isPayload });
   return result.state === 'ok' ? result.data.data : null;
 });
 

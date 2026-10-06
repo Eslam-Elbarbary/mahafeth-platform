@@ -10,8 +10,6 @@ import { pageMetadata } from '@/lib/seo';
 
 type PageProps = { params: Promise<{ locale: string }> };
 
-export const revalidate = 300;
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};

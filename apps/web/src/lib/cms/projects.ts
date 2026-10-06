@@ -41,18 +41,12 @@ const isItem = (body: unknown): body is CmsItem<CmsProject> =>
 
 /** Published CMS projects, or `null` when the fallback content should be used instead. */
 const loadPublished = cache(async (): Promise<CmsProject[] | null> => {
-  const result = await cmsFetch('/projects?pageSize=100', {
-    tags: ['cms:projects'],
-    isValid: isList,
-  });
+  const result = await cmsFetch('/projects?pageSize=100', { isValid: isList });
   return result.state === 'ok' && result.data.data.length > 0 ? result.data.data : null;
 });
 
 const loadProject = cache((slug: string) =>
-  cmsFetch(`/projects/${encodeURIComponent(slug)}`, {
-    tags: ['cms:projects', `cms:project:${slug}`],
-    isValid: isItem,
-  }),
+  cmsFetch(`/projects/${encodeURIComponent(slug)}`, { isValid: isItem }),
 );
 
 /** Slides in the home showcase — the pinned stack is paced for a handful of projects. */

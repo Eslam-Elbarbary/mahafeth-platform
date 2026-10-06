@@ -1,3 +1,5 @@
+import { connection } from 'next/server';
+
 import { siteConfig } from '@/config/site';
 
 /*
@@ -16,15 +18,6 @@ export const cmsEnabled = process.env.CMS_ENABLED !== 'false';
  */
 const cmsApiUrl = process.env.CMS_API_URL || siteConfig.apiUrl;
 
-/** Seconds a CMS response stays fresh in the Next data cache (ISR). */
-export const CMS_REVALIDATE = 300;
-
-/*
- * `next dev` reads the CMS on every request: the backend's on-demand revalidation targets the
- * deployed website, so a local dev server would otherwise show admin edits only after the window.
- */
-const revalidate = process.env.NODE_ENV === 'development' ? 0 : CMS_REVALIDATE;
-
 const TIMEOUT_MS = 3000;
 
 export type CmsResult<T> =
@@ -41,15 +34,22 @@ function warnOnce(reason: string) {
   console.warn(`[cms] ${reason} — serving fallback content (${cmsApiUrl}).`);
 }
 
+/*
+ * CMS content is read at request time and never stored in the Next data cache, so an admin save is
+ * visible on the next page request. Within one render, callers dedupe through React `cache()`.
+ * `connection()` sits outside the try block: it is what keeps CMS-backed routes out of build-time
+ * prerendering, and catching it would freeze the fallback content into a static page.
+ */
 export async function cmsFetch<T>(
   path: string,
-  { tags = [], isValid }: { tags?: string[]; isValid: (body: unknown) => body is T },
+  { isValid }: { isValid: (body: unknown) => body is T },
 ): Promise<CmsResult<T>> {
   if (!cmsEnabled) return { state: 'unavailable' };
+  await connection();
   try {
     const res = await fetch(`${cmsApiUrl}${path}`, {
       headers: { Accept: 'application/json' },
-      next: { revalidate, tags: ['cms', ...tags] },
+      cache: 'no-store',
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (res.status === 404) return { state: 'missing' };

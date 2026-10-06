@@ -27,7 +27,7 @@ const isList = (body: unknown): body is CmsList<CmsTeamMember> =>
 
 /** Visible CMS members in display order, or `null` when the fallback should be used. */
 const loadVisible = cache(async (): Promise<CmsTeamMember[] | null> => {
-  const result = await cmsFetch('/team', { tags: ['cms:team'], isValid: isList });
+  const result = await cmsFetch('/team', { isValid: isList });
   return result.state === 'ok' && result.data.data.length > 0 ? result.data.data : null;
 });
 

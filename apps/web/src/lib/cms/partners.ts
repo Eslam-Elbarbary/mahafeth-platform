@@ -27,7 +27,7 @@ const isList = (body: unknown): body is CmsList<CmsPartner> =>
 
 /** Visible CMS partners that have a logo, or `null` when the fallback should be used. */
 const loadVisible = cache(async (): Promise<CmsPartner[] | null> => {
-  const result = await cmsFetch('/partners', { tags: ['cms:partners'], isValid: isList });
+  const result = await cmsFetch('/partners', { isValid: isList });
   if (result.state !== 'ok') return null;
   const withLogo = result.data.data.filter((partner) => partner.logo);
   return withLogo.length > 0 ? withLogo : null;

@@ -34,15 +34,12 @@ const isItem = (body: unknown): body is CmsItem<CmsService> =>
 
 /** Published CMS services in display order, or `null` when the fallback content should be used. */
 const loadPublished = cache(async (): Promise<CmsService[] | null> => {
-  const result = await cmsFetch('/services', { tags: ['cms:services'], isValid: isList });
+  const result = await cmsFetch('/services', { isValid: isList });
   return result.state === 'ok' && result.data.data.length > 0 ? result.data.data : null;
 });
 
 const loadService = cache((slug: string) =>
-  cmsFetch(`/services/${encodeURIComponent(slug)}`, {
-    tags: ['cms:services', `cms:service:${slug}`],
-    isValid: isItem,
-  }),
+  cmsFetch(`/services/${encodeURIComponent(slug)}`, { isValid: isItem }),
 );
 
 const fallbackFor = (slug: string, locale: Locale) =>

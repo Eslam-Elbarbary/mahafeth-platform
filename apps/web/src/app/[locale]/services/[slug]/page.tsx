@@ -13,26 +13,12 @@ import { siteConfig } from '@/config/site';
 import type { ServiceDetail } from '@/content/types';
 import { getGlobalContent } from '@/lib/cms/global-content';
 import { getHomepage } from '@/lib/cms/pages';
-import {
-  getServiceDetail,
-  getServiceDetailLabels,
-  getServices,
-  serviceSlugs,
-} from '@/lib/cms/services';
+import { getServiceDetail, getServiceDetailLabels, getServices } from '@/lib/cms/services';
 import { getSite } from '@/lib/cms/site';
 import { isLocale, type Locale } from '@/lib/i18n/config';
 import { pageMetadata } from '@/lib/seo';
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> };
-
-/* Known slugs are prerendered; services published later render on first request. Both refresh
- * with the CMS cache (`CMS_REVALIDATE`). */
-export const dynamicParams = true;
-export const revalidate = 300;
-
-export async function generateStaticParams() {
-  return (await serviceSlugs()).map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;

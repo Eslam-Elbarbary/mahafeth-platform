@@ -21,22 +21,12 @@ import {
   getProjectDetailLabels,
   getRelatedProjects,
   projectInterestHref,
-  projectSlugs,
 } from '@/lib/cms/projects';
 import { getSite } from '@/lib/cms/site';
 import { isLocale, type Locale } from '@/lib/i18n/config';
 import { pageMetadata } from '@/lib/seo';
 
 type PageProps = { params: Promise<{ locale: string; slug: string }> };
-
-/* Known slugs are prerendered; projects published later render on first request. Both refresh
- * with the CMS cache (`CMS_REVALIDATE`). */
-export const dynamicParams = true;
-export const revalidate = 300;
-
-export async function generateStaticParams() {
-  return (await projectSlugs()).map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -49,13 +39,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     image: project.image,
   });
 }
-
-export const dynamic = 'force-dynamic';
-// export const revalidate = 0;
-
-// export async function generateStaticParams() {
-//   return (await projectSlugs()).map((slug) => ({ slug }));
-// }
 
 function projectJsonLd(project: ProjectDetail, locale: Locale) {
   const url = `${siteConfig.url}/${locale}/projects/${project.slug}`;

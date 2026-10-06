@@ -24,8 +24,6 @@ import { getSite } from '@/lib/cms/site';
 import { getLeadershipMembers } from '@/lib/cms/team';
 import { isLocale } from '@/lib/i18n/config';
 
-export const revalidate = 300;
-
 type PageProps = { params: Promise<{ locale: string }> };
 
 /* The layout sets the site-wide SEO; the home page only overrides what its CMS page defines. */

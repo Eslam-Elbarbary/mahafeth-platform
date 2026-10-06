@@ -4,9 +4,10 @@ import { revalidateTag } from 'next/cache';
 import { type NextRequest, NextResponse } from 'next/server';
 
 /*
- * On-demand revalidation, called by the backend after every successful admin write so CMS changes
- * appear without waiting for the ISR window. Authenticated with `REVALIDATE_SECRET`; disabled when
- * the secret is not configured.
+ * On-demand revalidation, called by the backend after every successful admin write. CMS reads are
+ * uncached (see `lib/cms/client.ts`), so CMS freshness does not depend on this endpoint; it drops
+ * any `cms`-tagged cache entries. Authenticated with `REVALIDATE_SECRET`; disabled when the secret
+ * is not configured.
  */
 
 const ALLOWED_TAG = /^cms(?::[\w-]+)*$/;

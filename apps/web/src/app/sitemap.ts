@@ -6,8 +6,6 @@ import { projectSlugs } from '@/lib/cms/projects';
 import { serviceSlugs } from '@/lib/cms/services';
 import { locales } from '@/lib/i18n/config';
 
-export const revalidate = 300;
-
 /** Routes whose content is a CMS page — their entries carry the last edit date. */
 const CMS_ROUTES: Record<string, CmsPageSlug> = {
   '': 'home',
