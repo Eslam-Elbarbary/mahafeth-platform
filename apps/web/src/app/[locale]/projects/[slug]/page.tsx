@@ -50,6 +50,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
+export const dynamic = 'force-dynamic';
+// export const revalidate = 0;
+
+// export async function generateStaticParams() {
+//   return (await projectSlugs()).map((slug) => ({ slug }));
+// }
+
 function projectJsonLd(project: ProjectDetail, locale: Locale) {
   const url = `${siteConfig.url}/${locale}/projects/${project.slug}`;
   return {
