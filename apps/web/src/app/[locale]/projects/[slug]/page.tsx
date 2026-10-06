@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/page/PageHero';
 import { SectionHeader } from '@/components/page/SectionHeader';
