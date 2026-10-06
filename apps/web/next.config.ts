@@ -3,18 +3,12 @@ import type { NextConfig } from 'next';
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '0.0.0.0']);
 
 /*
- * On Vercel the public URL comes from its system variables when not set explicitly. Without an
- * explicit API URL there is no backend, so the CMS is off and pages use the fallback content.
+ * On Vercel the public site URL comes from its system variables when not set explicitly. The API
+ * URL has no such default: a missing NEXT_PUBLIC_API_URL fails the production check below.
  */
 const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
 const vercelUrl = process.env.VERCEL && vercelHost ? `https://${vercelHost}` : undefined;
-if (vercelUrl) {
-  process.env.NEXT_PUBLIC_SITE_URL ||= vercelUrl;
-  if (!process.env.NEXT_PUBLIC_API_URL) {
-    process.env.NEXT_PUBLIC_API_URL = `${process.env.NEXT_PUBLIC_SITE_URL}/api/v1`;
-    process.env.CMS_ENABLED = 'false';
-  }
-}
+if (vercelUrl) process.env.NEXT_PUBLIC_SITE_URL ||= vercelUrl;
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 const publicApiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
@@ -54,13 +48,7 @@ const cdn = process.env.CMS_MEDIA_URL ? new URL(process.env.CMS_MEDIA_URL) : nul
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  env: vercelUrl
-    ? {
-        NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL!,
-        NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL!,
-        CMS_ENABLED: process.env.CMS_ENABLED ?? 'true',
-      }
-    : {},
+  env: vercelUrl ? { NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL! } : {},
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: cdn

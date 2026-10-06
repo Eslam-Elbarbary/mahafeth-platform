@@ -19,6 +19,12 @@ const cmsApiUrl = process.env.CMS_API_URL || siteConfig.apiUrl;
 /** Seconds a CMS response stays fresh in the Next data cache (ISR). */
 export const CMS_REVALIDATE = 300;
 
+/*
+ * `next dev` reads the CMS on every request: the backend's on-demand revalidation targets the
+ * deployed website, so a local dev server would otherwise show admin edits only after the window.
+ */
+const revalidate = process.env.NODE_ENV === 'development' ? 0 : CMS_REVALIDATE;
+
 const TIMEOUT_MS = 3000;
 
 export type CmsResult<T> =
@@ -43,7 +49,7 @@ export async function cmsFetch<T>(
   try {
     const res = await fetch(`${cmsApiUrl}${path}`, {
       headers: { Accept: 'application/json' },
-      next: { revalidate: CMS_REVALIDATE, tags: ['cms', ...tags] },
+      next: { revalidate, tags: ['cms', ...tags] },
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (res.status === 404) return { state: 'missing' };
